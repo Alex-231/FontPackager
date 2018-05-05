@@ -846,12 +846,17 @@ namespace FontPackager
 			{
 				int existindex = package.Fonts[fontslist.SelectedIndex].Characters.FindIndex(x => x.CharCode == i);
 
-				if (existindex != -1)
+                if (existindex != -1)
 				{
-					System.Drawing.Image newpic = BitmapFromFont(importfont, charoffset, ((char)i).ToString());
+                    int dwidth = package.Fonts[fontslist.SelectedIndex].Characters[existindex].Data.dispWidth;
+                    if (dwidth % 2 == 1)
+                        dwidth++;
+                    dwidth = (int)(dwidth * 1.5f);
+
+                    System.Drawing.Image newpic = BitmapFromFont(importfont, charoffset, ((char)i).ToString());
 					if (newpic == null) continue;
 					if (newpic.Width == 1) continue;
-					package.AddCustomCharacter((ushort)i, fontslist.SelectedIndex, newpic, (CharTint)tintEnum.SelectedIndex, true);
+					package.AddCustomCharacter((ushort)i, fontslist.SelectedIndex, newpic, (CharTint)tintEnum.SelectedIndex, true, dwidth);
 
 					newpic.Dispose();
 				}
